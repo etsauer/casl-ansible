@@ -45,6 +45,26 @@ To start, we'll provision the `sample.casl.example.com` cluster defined in the `
 ansible-playbook -i /root/repository/casl-ansible/inventory/sample.casl.example.com.d/inventory /root/repository/casl-ansible/playbooks/openshift/end-to-end.yml
 ```
 
+### Updating a Cluster
+
+Once provisioned, a cluster may be adjusted/reconfigured as needed by updating inventory and re-running the `end-to-end.yml` playbook.
+
+### Scaling Up and Down
+
+A cluster's Infra and App nodes may be scaled up and down by editing the following parameters in the `hosts` or `all.yml` files
+
+```
+openstack_num_nodes=1
+openstack_num_infra=1
+```
+
+and then re-running the playbook.
+
+```
+ansible-playbook -i /root/repository/casl-ansible/inventory/sample.casl.example.com.d/inventory /root/repository/casl-ansible/playbooks/openshift/end-to-end.yml
+```
+
+
 ## Roles
 
 The following are a list of Absible roles available
