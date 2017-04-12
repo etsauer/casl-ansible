@@ -2,8 +2,6 @@ FROM centos:7
 
 MAINTAINER Andrew Block “andrew.block@redhat.com”
 
-ADD bin/start.sh /root/
-
 # Update System and install clients
 RUN yum install -y --setopt=tsflags=nodocs https://repos.fedorapeople.org/repos/openstack/openstack-mitaka/rdo-release-mitaka-6.noarch.rpm centos-release-openshift-origin; \
   yum update -y; \
@@ -21,11 +19,13 @@ RUN yum install -y --setopt=tsflags=nodocs https://repos.fedorapeople.org/repos/
   pip install --upgrade pip; \
   pip install shade six git+git://github.com/ansible/ansible.git@stable-2.3
 
+ADD bin/start.sh /root/
+
 # Set /root as starting directory
 WORKDIR /root
 
 # Default Command
-CMD ["/bin/bash"]
+#CMD ["/bin/bash"]
 
 # Helper script
 ENTRYPOINT ["/root/start.sh"]
