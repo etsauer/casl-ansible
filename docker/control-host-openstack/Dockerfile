@@ -3,7 +3,7 @@ FROM centos:7
 MAINTAINER Andrew Block “andrew.block@redhat.com”
 
 # Update System and install clients
-RUN yum install -y --setopt=tsflags=nodocs https://repos.fedorapeople.org/repos/openstack/openstack-mitaka/rdo-release-mitaka-6.noarch.rpm centos-release-openshift-origin; \
+RUN yum install -y --setopt=tsflags=nodocs https://repos.fedorapeople.org/repos/openstack/openstack-newton/rdo-release-newton-4.noarch.rpm centos-release-openshift-origin; \
   yum update -y; \
   yum install -y python-devel epel-release; \
   yum install -y git tar gcc libffi-devel openssl-devel bind-utils httpd-tools java-1.8.0-openjdk-headless\
@@ -23,9 +23,6 @@ ADD bin/start.sh /root/
 
 # Set /root as starting directory
 WORKDIR /root
-
-# Default Command
-#CMD ["/bin/bash"]
 
 # Helper script
 ENTRYPOINT ["/root/start.sh"]
