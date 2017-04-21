@@ -1,5 +1,5 @@
 ---
-- include: plays/configure_host_groups.yml
+#- include: plays/configure_host_groups.yml
 
 - hosts: cluster_hosts
   roles:

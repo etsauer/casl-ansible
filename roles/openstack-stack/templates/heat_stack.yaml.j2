@@ -1,4 +1,4 @@
-heat_template_version: 2014-10-16
+heat_template_version: 2016-10-14
 
 description: OpenShift cluster
 
@@ -510,17 +510,22 @@ resources:
     properties:
       count: { get_param: num_etcd }
       resource_def:
-        type: heat_stack_server.yaml
+        type: server.yaml
         properties:
           name:
             str_replace:
-              template: k8s_type-%index%.cluster_id.cluster_env
+              template: k8s_type-%index%.cluster_id
               params:
                 cluster_id: { get_param: cluster_id }
                 k8s_type: etcd
-                cluster_env: { get_param: cluster_env }
           cluster_env: { get_param: cluster_env }
           cluster_id:  { get_param: cluster_id }
+          group:
+            str_replace:
+              template: k8s_type.cluster_id
+              params:
+                k8s_type: etcds
+                cluster_id: { get_param: cluster_id }
           type:        etcd
           image:       { get_param: etcd_image }
           flavor:      { get_param: etcd_flavor }
@@ -544,17 +549,22 @@ resources:
     properties:
       count: { get_param: num_masters }
       resource_def:
-        type: heat_stack_server.yaml
+        type: server.yaml
         properties:
           name:
             str_replace:
-              template: k8s_type-%index%.cluster_id.cluster_env
+              template: k8s_type-%index%.cluster_id
               params:
                 cluster_id: { get_param: cluster_id }
                 k8s_type: master
-                cluster_env: { get_param: cluster_env }
           cluster_env: { get_param: cluster_env }
           cluster_id:  { get_param: cluster_id }
+          group:
+            str_replace:
+              template: k8s_type.cluster_id
+              params:
+                k8s_type: masters
+                cluster_id: { get_param: cluster_id }
           type:        master
           image:       { get_param: master_image }
           flavor:      { get_param: master_flavor }
@@ -579,20 +589,27 @@ resources:
     properties:
       count: { get_param: num_nodes }
       resource_def:
-        type: heat_stack_server.yaml
+        type: server.yaml
         properties:
           name:
             str_replace:
-              template: subtype-k8s_type-%index%.cluster_id.cluster_env
+              template: subtype-k8s_type-%index%.cluster_id
               params:
                 cluster_id: { get_param: cluster_id }
                 k8s_type: node
                 subtype: app
-                cluster_env: { get_param: cluster_env }
           cluster_env: { get_param: cluster_env }
           cluster_id:  { get_param: cluster_id }
+          group:
+            str_replace:
+              template: k8s_type.cluster_id
+              params:
+                k8s_type: nodes
+                cluster_id: { get_param: cluster_id }
           type:        node
           subtype:     app
+          node_labels:
+            region: primary
           image:       { get_param: node_image }
           flavor:      { get_param: node_flavor }
           key_name:    { get_param: ssh_public_key }
@@ -615,20 +632,27 @@ resources:
     properties:
       count: { get_param: num_infra }
       resource_def:
-        type: heat_stack_server.yaml
+        type: server.yaml
         properties:
           name:
             str_replace:
-              template: subtypek8s_type-%index%.cluster_id.cluster_env
+              template: subtypek8s_type-%index%.cluster_id
               params:
                 cluster_id: { get_param: cluster_id }
                 k8s_type: node
                 subtype: infra
-                cluster_env: { get_param: cluster_env }
           cluster_env: { get_param: cluster_env }
           cluster_id:  { get_param: cluster_id }
+          group:
+            str_replace:
+              template: k8s_type.cluster_id
+              params:
+                k8s_type: infra
+                cluster_id: { get_param: cluster_id }
           type:        node
           subtype:     infra
+          node_labels:
+            region: infra
           image:       { get_param: infra_image }
           flavor:      { get_param: infra_flavor }
           key_name:    { get_param: ssh_public_key }
@@ -652,17 +676,22 @@ resources:
     properties:
       count: { get_param: num_dns }
       resource_def:
-        type: heat_stack_server.yaml
+        type: server.yaml
         properties:
           name:
             str_replace:
-              template: k8s_type-%index%.cluster_id.cluster_env
+              template: k8s_type-%index%.cluster_id
               params:
                 cluster_id: { get_param: cluster_id }
                 k8s_type: dns
-                cluster_env: { get_param: cluster_env }
           cluster_env: { get_param: cluster_env }
           cluster_id:  { get_param: cluster_id }
+          group:
+            str_replace:
+              template: k8s_type.cluster_id
+              params:
+                k8s_type: dns
+                cluster_id: { get_param: cluster_id }
           type:        dns
           image:       { get_param: dns_image }
           flavor:      { get_param: dns_flavor }
