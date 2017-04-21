@@ -33,8 +33,6 @@
   tasks:
   - meta: refresh_inventory
 
-    #- include: plays/configure_host_groups.yml
-
 - hosts: cluster_hosts
   gather_facts: false
   tasks:

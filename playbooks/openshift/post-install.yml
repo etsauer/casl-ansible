@@ -1,6 +1,4 @@
 ---
-#- include: plays/configure_host_groups.yml
-
 - hosts: cluster_hosts
   roles:
     - role: sync-keys
