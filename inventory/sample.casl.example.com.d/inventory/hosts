@@ -1,30 +1,5 @@
-[all:vars]
-ansible_user=openshift
-ansible_become=True
-
-# OpenStack Provisioning Variables
-openstack_ssh_public_key="esauer-util3"
-openstack_default_image_name="rhel-guest-image-7.2"
-openstack_default_flavor="m1.large"
-openstack_external_network_name="external"
-openstack_dns_domain="casl.example.com"
-openstack_subnet_prefix=192.168.99
-openstack_nameservers=10.9.48.31
-openstack_num_nodes=1
-openstack_num_infra=1
-dns_domain="casl.example.com"
-cluster_id="casl.example.com"
-public_dns_forwarder=10.9.48.31
-#env_id=""
-
-# Subscription Management Details
-rhsm_register=True
-rhsm_satellite='sat6.example.com'
-rhsm_org='Emerging_Tech_Lab'
-rhsm_activationkey='rhel-7-ose'
-rhsm_repos='["rhel-7-server-rpms", "rhel-7-server-ose-3.3-rpms", "rhel-7-server-extras-rpms"]'
-rhsm_password=''
-
+#[all:vars]
+# For all group_vars, see ./group_vars/all.yml
 
 # Create an OSEv3 group that contains the master, nodes, etcd, and lb groups.
 # The lb group lets Ansible configure HAProxy as the load balancing solution.
@@ -41,22 +16,22 @@ etcd
 
 # Host Groups
 
-[masters]
+[masters:children]
+masters.sample.casl.example.com
 
-[etcd]
+[etcd:children]
+etcd.sample.casl.example.com
 
 [nodes:children]
 masters
-infra_hosts
-node_hosts
+infra.sample.casl.example.com
+nodes.sample.casl.example.com
 
-[node_hosts]
-[node_hosts:vars]
-openshift_node_labels="{'region': 'primary', 'zone': 'default'}"
+[dns:children]
+dns.sample.casl.example.com
 
-[infra_hosts]
-[infra_hosts:vars]
-openshift_node_labels="{'region': 'infra', 'zone': 'default'}"
-
-
-[dns]
+[masters.sample.casl.example.com]
+[etcd.sample.casl.example.com]
+[infra.sample.casl.example.com]
+[nodes.sample.casl.example.com]
+[dns.sample.casl.example.com]
