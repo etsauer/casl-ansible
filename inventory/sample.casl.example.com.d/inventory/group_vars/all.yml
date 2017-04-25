@@ -2,9 +2,10 @@ ansible_user: openshift
 ansible_become: True
 
 # OpenStack Provisioning Variables
-openstack_ssh_public_key: "esauer-util3"  
+# use the "-e" option to set "openstack_ssh_public_key"
+#openstack_ssh_public_key:
 openstack_default_image_name: "rhel-guest-image-7.3-35.x86_64"
-openstack_default_flavor: "m1.large"
+openstack_default_flavor: "m1.medium"
 openstack_external_network_name: "external"
 openstack_dns_domain: "casl.example.com" 
 openstack_subnet_prefix: 192.168.99
@@ -16,7 +17,7 @@ cluster_id: "casl.example.com"
 public_dns_forwarder: 10.9.48.31
 env_id: "sample"
 #
-docker_volume_size: "50"
+docker_volume_size: "5"
 docker_storage_block_device: "/dev/vdb"
 #
 # # Subscription Management Details
