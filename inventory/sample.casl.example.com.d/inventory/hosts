@@ -31,6 +31,9 @@ masters
 infra.sample.casl.example.com
 nodes.sample.casl.example.com
 
+[infra_hosts:children]
+infra.sample.casl.example.com
+
 [dns:children]
 dns.sample.casl.example.com
 
