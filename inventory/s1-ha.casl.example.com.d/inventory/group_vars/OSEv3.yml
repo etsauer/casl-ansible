@@ -1,0 +1,61 @@
+---
+deployment_type: openshift-enterprise
+openshift_deployment_type: openshift-enterprise
+openshift_release: v3.4
+openshift_master_default_subdomain: "apps.{{ env_id }}.{{ dns_domain }}"
+
+# LDAP Identity Provider
+openshift_master_identity_providers:
+ - 'bindDN': 'uid=ldap-casl,cn=users,cn=accounts,dc=etl,dc=rht-labs,dc=com'
+   'kind': 'LDAPPasswordIdentityProvider'
+   'name': 'paas_ldap_provider'
+   'bindPassword': 'ldap-casl01!'
+   'url': 'ldaps://idm-2.etl.rht-labs.com:636/dc=etl,dc=rht-labs,dc=com?uid?sub?(memberOf=cn=ose_users,cn=groups,cn=accounts,dc=etl,dc=rht-labs,dc=com)' 
+   'challenge': 'true'
+   'attributes':
+     'email': ['mail']
+     'preferredUsername': ['uid']
+     'id': ['dn']
+     'name': ['displayName']
+   'login': 'true'
+   'insecure': 'false'
+   'ca': '/etc/pki/ca-trust/source/anchors/ipa.crt'
+openshift_master_ldap_ca_file: "{{ inventory_dir }}/../files/ipa-ca.crt"
+
+openshift_hosted_logging_deploy: true
+openshift_hosted_metrics_deploy: true
+
+openshift_cloudprovider_kind: openstack
+openshift_cloudprovider_openstack_auth_url: http://10.9.50.6:5000/v3
+openshift_cloudprovider_openstack_username: "{{ lookup('env','OCP_OSP_USERNAME') }}"
+openshift_cloudprovider_openstack_password: "{{ lookup('env','OCP_OSP_PASSWORD') }}"
+openshift_cloudprovider_openstack_domain_name: Default
+openshift_cloudprovider_openstack_tenant_id: 220ba500f3334c6b839453bbcefba1b8
+openshift_cloudprovider_openstack_tenant_name: esauer
+openshift_cloudprovider_openstack_region: RegionOne
+openshift_cloudprovider_openstack_lb_subnet_id: 98576f89-2881-46c1-963f-f7357s1-ha6c56a
+
+openshift_node_kubelet_args:
+  minimum-container-ttl-duration:
+  - "10s"
+  maximum-dead-containers-per-container:
+  - "2"
+  maximum-dead-containers:
+  - "50"
+  pods-per-core: 
+  - '10'
+  max-pods: 
+  - '250'
+  image-gc-high-threshold: 
+  - '80'
+  image-gc-low-threshold: 
+  - '60'
+
+osm_use_cockpit: true
+osm_cockpit_plugins: 
+- 'cockpit-kubernetes'
+#create_users:
+#  num_users: 5
+#  prefix: 'rdu-user'
+#  passwd_file: '/etc/origin/master/htpasswd'
+#  password: 'rdu-s1-ha'
