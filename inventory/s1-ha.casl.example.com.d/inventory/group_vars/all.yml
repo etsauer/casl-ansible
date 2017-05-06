@@ -10,13 +10,13 @@ openstack_external_network_name: "external"
 openstack_dns_domain: "casl.example.com"
 openstack_subnet_prefix: 192.168.99
 openstack_nameservers:
-- 10.9.48.31
+- 192.168.1.1
 openstack_num_masters: 3
 openstack_num_nodes: 2
 openstack_num_infra: 1
 dns_domain: "casl.example.com"
 cluster_id: "casl.example.com"
-public_dns_forwarder: 10.9.48.31
+public_dns_forwarder: 192.168.1.1
 env_id: "s1-ha"
 #
 docker_volume_size: "10"
