@@ -34,7 +34,7 @@ There are two options for running the `control-node` containers:
 The following environment variables can be used to control the execution environment within the control host:
 
 | variable | purpose | default value |
-|:--------:|:-------:|:-------------:|
+|:---------|:--------|:--------------|
 |SRC_CODE_DIR|The local source code directory|~/src|
 |DST_CODE_DIR|The remote directory for the source code directory|/root/code|
 |SRC_SSH_DIR|The local ssh config directory|~/.ssh|
