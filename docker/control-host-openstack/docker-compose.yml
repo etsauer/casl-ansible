@@ -1,6 +1,6 @@
 version: '2'
 services:
-  control-node:
+  control-host:
     command: daemonize
     volumes:
     - $SRC_CODE_DIR:$DST_CODE_DIR
