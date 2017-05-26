@@ -29,6 +29,23 @@ There are two options for running the `control-node` containers:
 
 ### Docker Compose (recommended)
 
+#### Environment Variables
+
+The following environment variables can be used to control the execution environment within the control host:
+
+| variable | purpose | default value |
+|:--------:|:-------:|:-------------:|
+|SRC_CODE_DIR|The local source code directory|~/src|
+|DST_CODE_DIR|The remote directory for the source code directory|/root/code|
+|SRC_SSH_DIR|The local ssh config directory|~/.ssh|
+|DST_SSH_DIR|The remote ssh config directory|/root/.ssh|
+|SRC_OSP_CONFIG_DIR|The local OpenStack config directory|~/.config/openstack|
+|DST_OSP_CONFIG_DIR|The remote OpenStack config directory|/root/.config/openstack|
+|SRC_ANSIBLE_CFG|The local Ansible config file|~/.ansible.cfg|
+|DST_ANSIBLE_CFG|The remote Ansible config file|/root/.ansible.cfg|
+
+
+
 Starting the container is done with the following:
 
 ```
@@ -61,6 +78,16 @@ The above commands expect your ansible inventories and playbooks repos to live a
 ### SSH Keys
 
 The above commands expect to mount the ssh keys needed to authenticate to openstack servers from ~/.ssh. If they live elsewhere, you'll need to update those paths in the command or in `docker-compose.yml`.
+
+## Building 
+
+The image can be built with the following command:
+
+```
+cd ./docker/control-host-openstack
+docker build -t redhatcop/control-host-openstack .
+```
+
 
 ## Troubleshooting
 
