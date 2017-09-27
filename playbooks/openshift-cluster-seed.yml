@@ -1,4 +1,4 @@
 ---
-- hosts: localhost
+- hosts: masters[0]
   roles:
     - openshift-applier
