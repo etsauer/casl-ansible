@@ -22,45 +22,18 @@ systemctl restart docker
 
 ## Running
 
-There are two options for running the `control-host` containers:
-
-1. Raw `docker run` command
-2. Background container via `docker-compose`
-
-### Docker Compose (recommended)
-
-#### Environment Variables
-
-The following environment variables can be used to control the execution environment within the control host (container):
-
-| variable | purpose | default value |
-|:---------|:--------|:--------------|
-|SRC_CODE_DIR|The local source code directory|~/src|
-|DST_CODE_DIR|The directory used for the source code directory inside the control host container|/root/code|
-|SRC_SSH_DIR|The local ssh config directory|~/.ssh|
-|DST_SSH_DIR|The ssh config directory inside the control host container|/mnt/.ssh|
-|SRC_OSP_CONFIG_DIR|The local OpenStack config directory|~/.config/openstack|
-|DST_OSP_CONFIG_DIR|The OpenStack config directory inside the control host container|/root/.config/openstack|
-|SRC_ANSIBLE_CFG|The local Ansible config file|~/.ansible.cfg|
-|DST_ANSIBLE_CFG|The Ansible config file inside the control host container|/root/.ansible.cfg|
-
-#### Running the control host (container)
-
-Starting the control host / container is done with the following:
+A typical run of the image would look like:
 
 ```
-cd ./docker/control-host-openstack
-docker-compose up -d
+docker run -u `id -u` \
+      -v $HOME/.ssh/id_rsa:/opt/app-root/src/.ssh/id_rsa:Z \
+      -v $HOME/src/:/tmp/src:Z \
+      -v $HOME/.config/openstack/:/opt/app-root/src/.config/openstack/ \
+      -e INVENTORY_DIR=/tmp/src/casl-ansible /inventory/sample.casl.example.com.d/inventory/ \
+      -e PLAYBOOK_FILE=/tmp/src/casl-ansible/playbooks/openshift/end-to-end.yml \
+      -e OPTS="-v" -t \
+      redhatcop/control-host-openstack
 ```
-
-Once the control host is running, you can exec into the container to run ansible commands.
-
-```
-docker exec -it controlhostopenstack_control-host_1 bash
-[]# ansible-playbook -i /root/code/casl-ansible/inventory/sample.casl.example.com.d/inventory/ code/casl-ansible/playbooks/openshift/end-to-end.yml
-```
-
-### Raw Docker
 
 ```
 docker run -it --name control-host -v $HOME/.ssh:/root/.ssh -v $HOME/.config/openstack:/root/.config/openstack -v $HOME/src:/root/repository -v $HOME/.ansible.cfg:/root/.ansible.cfg docker.io/redhatcop/control-host-openstack bash
@@ -79,7 +52,7 @@ The above commands expect your ansible inventories and playbooks repos to live a
 
 The above commands expect to mount the ssh keys needed to authenticate to openstack servers from ~/.ssh. If they live elsewhere, you'll need to update those paths in the command or in `docker-compose.yml`.
 
-## Building 
+## Building
 
 The image can be built with the following command:
 
