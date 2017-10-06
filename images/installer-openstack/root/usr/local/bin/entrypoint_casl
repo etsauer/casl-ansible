@@ -2,4 +2,4 @@
 
 source /opt/app-root/src/.config/openstack/openrc.sh
 
-/usr/local/bin/run
+source /usr/local/bin/entrypoint

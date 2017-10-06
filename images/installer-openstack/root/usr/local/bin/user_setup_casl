@@ -1,0 +1,7 @@
+#!/bin/sh
+set -x
+
+chmod g+rw /etc/resolv.conf
+ls -l  /etc/resolv.conf
+
+rm $0

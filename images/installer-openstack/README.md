@@ -29,15 +29,10 @@ docker run -u `id -u` \
       -v $HOME/.ssh/id_rsa:/opt/app-root/src/.ssh/id_rsa:Z \
       -v $HOME/src/:/tmp/src:Z \
       -v $HOME/.config/openstack/:/opt/app-root/src/.config/openstack/ \
-      -e INVENTORY_DIR=/tmp/src/casl-ansible /inventory/sample.casl.example.com.d/inventory/ \
+      -e INVENTORY_DIR=/tmp/src/casl-ansible/inventory/sample.casl.example.com.d/inventory/ \
       -e PLAYBOOK_FILE=/tmp/src/casl-ansible/playbooks/openshift/end-to-end.yml \
       -e OPTS="-v" -t \
-      redhatcop/control-host-openstack
-```
-
-```
-docker run -it --name control-host -v $HOME/.ssh:/root/.ssh -v $HOME/.config/openstack:/root/.config/openstack -v $HOME/src:/root/repository -v $HOME/.ansible.cfg:/root/.ansible.cfg docker.io/redhatcop/control-host-openstack bash
-[]# ansible-playbook -i /root/code/casl-ansible/inventory/sample.casl.example.com.d/inventory/ code/casl-ansible/playbooks/openshift/end-to-end.yml
+      redhatcop/installer-openstack
 ```
 
 ### OpenStack Configuration Files

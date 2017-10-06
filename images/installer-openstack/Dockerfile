@@ -21,6 +21,9 @@ RUN yum install -y epel-release; \
 
 COPY images/installer-openstack/root /
 
+RUN /usr/local/bin/user_setup_casl
+
 USER ${USER_UID}
 
-CMD [ "/usr/local/bin/run_casl" ]
+ENTRYPOINT [ "/usr/local/bin/entrypoint_casl" ]
+CMD [ "/usr/local/bin/run" ]
