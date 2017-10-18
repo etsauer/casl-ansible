@@ -1,4 +1,7 @@
 ---
+- hosts: seed-hosts
+  roles:
+  - openshift-pv-cleanup
 
 - include: delete-openstack.yml
   when: 
