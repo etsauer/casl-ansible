@@ -4,4 +4,7 @@ set -x
 chmod g+rw /etc/resolv.conf
 ls -l  /etc/resolv.conf
 
+mkdir -p ${HOME}/.ssh
+chown -R ${USER_UID}:0 ${HOME}
+
 rm $0
