@@ -31,31 +31,23 @@ docker run -u `id -u` \
       -v $HOME/.config/openstack/:/opt/app-root/src/.config/openstack/ \
       -e INVENTORY_DIR=/tmp/src/casl-ansible/inventory/sample.casl.example.com.d/inventory/ \
       -e PLAYBOOK_FILE=/tmp/src/casl-ansible/playbooks/openshift/end-to-end.yml \
-      -e OPTS="-v" -t \
+      -e OPTS="-v openstack_ssh_public_key=my-public-key" -t \
       redhatcop/installer-openstack
 ```
 
-### OpenStack Configuration Files
+NOTE: The above commands expects the following inputs:
+* Your ssh key to be mounted in the container at `/opt/app-root/src/.ssh/id_rsa`
+* An link:https://docs.openstack.org/user-guide/common/cli-set-environment-variables-using-openstack-rc.html[OpenStack RC file] to be mounted at `/opt/app-root/src/.config/openstack/opensh.rc`.
+* Your ansible inventories and playbooks repos to live within the same directory, mounted at `/tmp/src`
 
-The above commands expect you to have an link:https://docs.openstack.org/user-guide/common/cli-set-environment-variables-using-openstack-rc.html[OpenStack RC file] at `~/.config/openstack/openrc.sh`.
+## Building the Image
 
-### Repository Content & Scripts
-
-The above commands expect your ansible inventories and playbooks repos to live at `~/src`. If it lives elsewhere you'll need to update those file paths, either in the command, or in `docker-compose.yml`.
-
-### SSH Keys
-
-The above commands expect to mount the ssh keys needed to authenticate to openstack servers from ~/.ssh. If they live elsewhere, you'll need to update those paths in the command or in `docker-compose.yml`.
-
-## Building
-
-The image can be built with the following command:
+This image is built and published to docker.io, so there's no reason to build it if you're just wanting to use the latest stable version. However, if you need to build it for development reasons, here's how:
 
 ```
-cd ./docker/control-host-openstack
-docker build -t redhatcop/control-host-openstack .
+cd ./casl-ansible
+docker build -f images/installer-openstack/Dockerfile -t redhatcop/installer-openstack .
 ```
-
 
 ## Troubleshooting
 
