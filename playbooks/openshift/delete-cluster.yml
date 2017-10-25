@@ -1,8 +1,8 @@
 ---
 - hosts: seed-hosts
   roles:
-  - roles/openshift-ansible-contrib/openshift-pv-cleanup
+  - openshift-ansible-contrib/roles/openshift-pv-cleanup
 
 - include: delete-openstack.yml
-  when: 
+  when:
   - hosting_infrastructure == 'openstack'
