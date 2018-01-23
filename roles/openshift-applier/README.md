@@ -43,10 +43,12 @@ The `tags` definition is a list of tags that will be processed if the `filter_ta
 
 #### Sourcing a directory with files
 
-You can source a directory composed of static files (without parameters) using `content_dir` instead of defining each file individually. That would look like this:
+You can source a directory composed of static files (without parameters) using `files` instead of defining each file individually. That would look like this:
 ```yaml
 - object: policy
-  content_dir: <dir_with_policy_files>
+  content:
+  - name: directory of files
+    file: <path-to>/directory/
 ```
 In this example above, all of the files in the `<dir_with_policy_files>` directory would get sourced and applied to the cluster (native OpenShift processing).
 
@@ -119,15 +121,18 @@ openshift_cluster_content:
 
 ### Filtering content based on tags
 
-The `openshift-applier` supports the use of tags in the inventory (see example above) to allow for filtering which content should be processed and not. The `filter_tags` variable/fact takes a comma separated list of tags that will be processed and only content/content_dir with matching tags will be applied. 
+The `openshift-applier` supports the use of tags in the inventory (see example above) to allow for filtering which content should be processed and not. The `filter_tags` variable/fact takes a comma separated list of tags that will be processed and only content/content_dir with matching tags will be applied.
 
 **_NOTE:_** Entries in the inventory without tags will not be procssed when a valid list is supplied with the `filter_tags` option.
 
 ```
 filter_tags=tag1,tag2
 
-``` 
+```
 
+### Deprovisioning
+
+The `openshift-applier` role also supports deprovisioning of resources using `file_action: delete` or `template_action: delete`. This can be done either on individual files, if you want to continually ensure objects remain deleted, or it may be done globally using `provision: false`. Using `provision: false` essentially acts like a big 'undo' button, re-running all files and templates through `oc delete -f <resources>`. This can be useful when you want to do a full cleanup to ensure the integrity of you IaC repo, or for simple cleanup while testing changes.
 
 Dependencies
 ------------
