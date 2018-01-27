@@ -22,10 +22,13 @@ In addition to _cloning this repo_, you'll need the following:
 ## Set up a local environment
 
 * Install Docker and Ansible
++
 On RHEL/CentOS:
++
 ```
 yum install -y docker ansible
 ```
++
 On Fedora:
 ```
 dnf install -y docker ansible
