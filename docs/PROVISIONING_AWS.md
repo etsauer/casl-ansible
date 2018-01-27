@@ -1,32 +1,71 @@
 # OpenShift on AWS EC2 using CASL
 
-## Local Setup (one time, only)
+* Gather prerequisites
+* Set up local environment
+* Build inventory
+* Provision a cluster
+* Scale a Cluster
+* Delete a Cluster
 
-> **NOTE:** These steps are a canned set of steps serving as an example, and may be different in your environment.
+## Gather prerequisites
 
 In addition to _cloning this repo_, you'll need the following:
 
-* Access to an AWS account with the proper policies to create resources (see details below)
-* Docker installed
-  * RHEL/CentOS: `yum install -y docker`
-  * Fedora: `dnf install -y docker`
-  * **NOTE:** If you plan to run docker as yourself (non-root), your username must be added to the `docker` user group.
+* An AWS account with the proper policies & permissions to create & delete the following:
+  * EC2 resources (instances, volumes, VPCs, subnets, security groups, etc.)
+  * (Optional) Route 53 zones
+  * (Optional) S3 Buckets
+* A Key Pair created in EC2. [Click here for instructions](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair). Make sure you created it in the right region.
+* An _environment id_ (`env_id`) and _DNS Domain_ (`dns_domain`) under which the cluster will be created. The two will be concatenated together to form the cluster identity in the form of `env_id.dns_domain` and will be used as the base for all other hostnames created.
 
+
+## Set up a local environment
+
+* Install Docker and Ansible
+On RHEL/CentOS:
+```
+yum install -y docker ansible
+```
+On Fedora:
+```
+dnf install -y docker ansible
+```
+NOTE: If you plan to run docker as yourself (non-root), your username must be added to the `docker` user group.
+* Clone this repo
 ```
 cd ~/src/
 git clone https://github.com/redhat-cop/casl-ansible.git
 ```
-
-* Run `ansible-galaxy` to pull in the necessary requirements for the CASL provisioning of OpenShift on AWS:
-
+* Run `ansible-galaxy` to pull in the necessary requirements for the CASL provisioning of OpenShift on AWS
 ```
-cd ~/src/casl-ansible
+cd ~/casl-ansible
 ansible-galaxy install -r casl-requirements.yml -p roles
 ```
 
-## AWS specific requirements
-* Available parameters to use the AWS provision can be found in the Role's [README](../roles/manage-aws-infra/README.md)
-* A [Key-pair in AWS](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair)
+## Build Inventory
+
+* Create a new inventory from the sample in this repo.
+```
+cp -r casl-ansible/inventory/sample.aws.example.com.d/ ~/c1-ocp.example.com/
+```
+* Edit `~/c1-ocp.example.com/inventory/group_vars/all.yml`. At a minimum, you must set values for the following
+```
+...
+env_id: "<REPLACE WITH VALID ENV ID - i.e: env1>"
+...
+aws_image_name: <REPLACE WITH VALID AMI>
+...
+dns_domain: "<REPLACE WITH A VALID ROUTE53 DNS DOMAIN>"
+...
+aws_region: <REPLACE WITH VALID AWS REGION>
+...
+rhsm_username: '<REPLACE WITH VALID RHSM USERNAME>'
+rhsm_password: '<REPLACE WITH VALID RHSM PASSWORD>'
+
+```
+
+Other available parameters to use the AWS provision can be found in the Role's [README](../roles/manage-aws-infra/README.md)
+
 * Modify 'regions' entry (line 13) in the inventory 'ec2.ini' file to match the 'aws_region' variable in your inventory
 * Modify 'instance_filters' entry (line 14) in the inventory 'ec2.ini' file to match the 'env_id' variable in your inventory's `all.yml`
 

@@ -3,22 +3,26 @@
 Automation of OpenShift and Container related tasks using [Ansible](http://www.ansible.com/).
 (This includes automation of OpenShift Cluster provisioning as well as other automation tasks post-provisioning.)
 
-# Automation Topics
+## Automation Topics
 
-## Provisioning An OpenShift Cluster
+### Provisioning An OpenShift Cluster
 
-The CASL Ansible tools provide everything needed to automatically provision an OpenShift cluster from scratch. Visit the provisioning guide relevant to you to get started.
+The CASL Ansible tools provide everything needed to automatically provision an OpenShift cluster from scratch on various different cloud environments. In general these cloud-specific provisioners share a common architecture and a core set of roles and playbooks. Our CASL provisioning guide breaks down that architecture and commonalities in more detail.
+
+* [CASL Provisioning Architecture and Overview](./docs/PROVISIONING.md) 
+
+If you don't care about provisioning architecture just yet, and would like to get right down to provisioning a cluster, the cloud-specific provisioning guides should be enough to get you started.
 
 * [Provisioning an OpenShift Cluster on OpenStack](./docs/PROVISIONING_OPENSTACK.md)
 * [Provisioning an OpenShift Cluster on AWS](./docs/PROVISIONING_AWS.md)
 
 
-## Automation of OpenShift Cluster Content
+### Automation of OpenShift Cluster Content
 
 The [openshift-applier](roles/openshift-applier) is used to automate the seeding of OpenShift cluster content based on OpenShift templates and parameters files.
 
 
-## Compatibility Matrix
+### Compatibility Matrix
 
 For some tasks, the CASL repository has several dependencies on external repositories, such as:
 
@@ -27,4 +31,3 @@ For some tasks, the CASL repository has several dependencies on external reposit
 * [OpenShift Ansible Contrib](https://github.com/openshift/openshift-ansible-contrib) - A repository of extra, unsupported, and upstream Ansible roles and playbooks for OpenShift
 
 > **Note:** The dependencies are managed using `ansible-galaxy` and the specific instructions will call this out when there is a need to use galaxy to pull in the correct dependencies.
-
