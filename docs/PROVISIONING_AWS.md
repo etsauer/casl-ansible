@@ -22,28 +22,27 @@ In addition to _cloning this repo_, you'll need the following:
 ## Set up a local environment
 
 * Install Docker and Ansible
-+
-On RHEL/CentOS:
-+
-```
-yum install -y docker ansible
-```
-+
-On Fedora:
-```
-dnf install -y docker ansible
-```
-NOTE: If you plan to run docker as yourself (non-root), your username must be added to the `docker` user group.
+
+    On RHEL/CentOS:
+    ```
+    yum install -y docker ansible
+    ```
+
+    On Fedora:
+    ```
+    dnf install -y docker ansible
+    ```
+    NOTE: If you plan to run docker as yourself (non-root), your username must be added to the `docker` user group.
 * Clone this repo
-```
-cd ~/src/
-git clone https://github.com/redhat-cop/casl-ansible.git
-```
+    ```
+    cd ~/src/
+    git clone https://github.com/redhat-cop/casl-ansible.git
+    ```
 * Run `ansible-galaxy` to pull in the necessary requirements for the CASL provisioning of OpenShift on AWS
-```
-cd ~/casl-ansible
-ansible-galaxy install -r casl-requirements.yml -p roles
-```
+    ```
+    cd ~/casl-ansible
+    ansible-galaxy install -r casl-requirements.yml -p roles
+    ```
 
 ## Build Inventory
 
