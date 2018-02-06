@@ -18,7 +18,6 @@
   block:
   - fail:
       msg: "WARNING: This functionality is being deprecated. Please use the 'content.file' variable instead. See role docs for more info."
-      ignore_errors: True
   - command: >
       oc apply -f {{ tmp_inv_dir }}{{ entry.content_dir }}
   when:
