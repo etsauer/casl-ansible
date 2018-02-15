@@ -88,9 +88,8 @@
     oc {{ file_action }} {{ target_namespace }} -f {{ file }}
   register: command_result
   failed_when:
-  - command_result.rc != 0
-  - "'AlreadyExists' not in command_result.stderr"
-  - "'NotFound' not in command_result.stderr"
+    (command_result.rc != 0 and 'AlreadyExists' not in command_result.stderr and 'NotFound' not in command_result.stderr) or
+    (command_result.rc != 0 and 'AlreadyExists' not in command_result.stderr and 'NotFound' in command_result.stderr and file_action != 'delete')
   when:
   - file|trim != ''
 
@@ -104,9 +103,8 @@
     oc {{ template_action }} {{ target_namespace }} -f -
   register: command_result
   failed_when:
-  - command_result.rc != 0
-  - "'AlreadyExists' not in command_result.stderr"
-  - "'NotFound' not in command_result.stderr"
+    (command_result.rc != 0 and 'AlreadyExists' not in command_result.stderr and 'NotFound' not in command_result.stderr) or
+    (command_result.rc != 0 and 'AlreadyExists' not in command_result.stderr and 'NotFound' in command_result.stderr and template_action != 'delete')
   when:
   - template|trim != ''
   - params|trim != ''
