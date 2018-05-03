@@ -8,7 +8,11 @@ If you read through the link:PROVISIONING_ARCH.md[CASL Provisioning Architecture
 
 _Provision Infrastructure_ creates the servers/instances and any other supporting infrastructure required (network, DNS, load balancers, etc.). In general this phase
   - Begins with having credentials with proper access to an Infrastructure provider.
-  - Ends with servers provisioned and running with an OS installed and SSH keys (with root or sudo) pushed.
+  - Ends with:
+    - Servers provisioned and running with an OS installed
+    - SSH keys (with root or sudo) pushed.
+    - Load Balancers (if used) are in place
+    - DNS is in place for the Master Console, API, and Routers (see link:http://v1.uncontained.io/playbooks/installation/#dns[DNS])
 
 In many on-premise installs, the infrastructure may not yet be ready to automate to the level that our provisioning architecture expects. That's fine, we can still use the CASL Tools to automate the other 3 phases of install automation:
 
@@ -31,6 +35,7 @@ While the link:../inventory/sample.byo.example.com.d/[sample.byo.example.com] sa
 ----
 # Use RHSM username, password and optionally pool:
 # NOTE: use the -e option to specify on CLI instead of statically set here
+rhsm_register: True
 rhsm_username: '<REPLACE WITH VALID RHSM USERNAME>'
 rhsm_password: '<REPLACE WITH VALID RHSM PASSWORD>'
 
@@ -41,14 +46,15 @@ rhsm_pool: '<REPLACE WITH VALID RHSM PASSWORD>'
   - Provide a Satellite server and Activation Key:
 +
 ----
+rhsm_register: True
 rhsm_server_hostname: 'sat-6.example.com'
 rhsm_org_id: 'CASL_ORG'
 rhsm_activationkey: 'casl-latest'
 ----
 
-== Running the CASL Tools on my BYO infrastructure
+== Running the CASL Provisioning Tools on my BYO infrastructure
 
-Once the infrastructure has been manually provisioned and your inventory is prepped, you should be ready to run the CASL tools.
+Once the infrastructure has been manually provisioned and your inventory is prepped, you should be ready to run the CASL provisioning tools.
 
 The link:../playbooks/openshift/byo-infra.yml[byo-infra.yml] playbook can be run to complete the installation.
 

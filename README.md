@@ -19,7 +19,7 @@ Additionally, we have several fully automated provisioners through which you can
 
 ### Automation of Cluster Installation on Your Own (BYO) Infrastructure
 
-Additionally, for those who are using infrastructure that is either not yet fully automated, or not yet supported through a CASL provider, we provide a [Bring Your Own Infrastructure](./docs/BYO_INFRASTRUCTURE.adoc) guide to using CASL.
+For those who are using infrastructure that is either not yet fully automated, or not yet supported through a CASL provider, we provide a [Bring Your Own Infrastructure](./docs/BYO_INFRASTRUCTURE.adoc) guide to using CASL.
 
 ### Automation of OpenShift Cluster Content
 

@@ -3,15 +3,15 @@
 deployment_type: openshift-enterprise
 openshift_deployment_type: openshift-enterprise
 openshift_master_cluster_method: native
-openshift_release: v3.7
+openshift_release: v3.9
 
 # openshift_master_cluster_public_hostname must be something like:
 #   <prefix>.{{ env_id }}.{{ dns_domain }}
-openshift_master_cluster_public_hostname: master.{{ env_id }}.{{ dns_domain }}
+openshift_master_cluster_public_hostname: console.{{ env_id }}.{{ dns_domain }}
 
 # openshift_master_cluster_hostname must be something like:
 #   <prefix>.{{ env_id }}.{{ dns_domain }}
-openshift_master_cluster_hostname: master-internal.{{ env_id }}.{{ dns_domain }}
+openshift_master_cluster_hostname: api.{{ env_id }}.{{ dns_domain }}
 
 # openshift_master_default_subdomain must be something like:
 #   <prefix>.{{ env_id }}.{{ dns_domain }}
@@ -33,9 +33,6 @@ openshift_master_htpasswd_users:
 openshift_hosted_router_selector: 'region=infra'
 openshift_hosted_manage_router: true
 
-openshift_hosted_registry_selector: 'region=infra'
-openshift_hosted_manage_registry: true
-
 osm_default_node_selector: 'region=primary'
 
 openshift_docker_options: "--log-driver=json-file --log-opt max-size=50m --log-opt max-file=100"
@@ -45,6 +42,5 @@ os_sdn_network_plugin_name: 'redhat/openshift-ovs-networkpolicy'
 os_firewall_use_firewalld: true
 osm_cluster_network_cidr: 10.1.0.0/16
 
-openshift_enable_service_catalog: false
 openshift_hosted_prometheus_deploy: false
 openshift_cfme_install_app: false
