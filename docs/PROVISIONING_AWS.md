@@ -4,14 +4,15 @@
 
 > **NOTE:** These steps are a canned set of steps serving as an example, and may be different in your environment.
 
-In addition to _cloning this repo_, you'll need the following:
+Before getting started following this guide, you'll need the following:
 
 * Access to an AWS account with the proper policies to create resources (see details below)
 * Docker installed
   * RHEL/CentOS: `yum install -y docker`
   * Fedora: `dnf install -y docker`
   * **NOTE:** If you plan to run docker as yourself (non-root), your username must be added to the `docker` user group.
-
+* Ansible 2.5 or later installed
+  * [See Installation Guide](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
 ```
 cd ~/src/
 git clone https://github.com/redhat-cop/casl-ansible.git
@@ -26,11 +27,14 @@ cd ~/src/casl-ansible
 ansible-galaxy install -r casl-requirements.yml -p galaxy
 ```
 
-## AWS specific requirements
-* Available parameters to use the AWS provision can be found in the Role's [README](../roles/manage-aws-infra/README.md)
-* A [Key-pair in AWS](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair)
-* Modify 'regions' entry (line 13) in the inventory 'ec2.ini' file to match the 'aws_region' variable in your inventory
-* Modify 'instance_filters' entry (line 14) in the inventory 'ec2.ini' file to match the 'env_id' variable in your inventory's `all.yml`
+## AWS Setup
+
+The following needs to be configured in your AWS account.
+
+* An [IAM User](https://console.aws.amazon.com/iam/home?#/users) must be created with API access, and the ability to provision VPCs, Subnets, Instances, EBS Volumes, etc.
+  * Once created, set export `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` to your environment.
+* Create a [Key-pair in AWS](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair)
+* Create a [Hosted Zone](https://console.aws.amazon.com/route53/home?#hosted-zones:) in your AWS Account.
 
 Cool! Now you're ready to provision OpenShift clusters on AWS
 
@@ -42,16 +46,23 @@ As an example, we'll provision the `sample.aws.example.com` cluster defined in t
 
 The following is just an example on how the `sample.aws.example.com` inventory can be used:
 
-1) Edit `~/src/casl-ansible/inventory/sample.aws.example.com.d/inventory/group_vars/all.yml` to match your AWS environment. See comments in the file for more detailed information on how to fill these in.
+1. Select an [AWS Region](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html) you would like to provision your cluster in.
+  * Modify the `regions` entry (line 13) in the inventory `ec2.ini` with your region
+  * Modify the `cloud_infrastructure.region` variable in `group_vars/all.yml` with your region.
+2. Select an _environment id_. This is a shortname for your cluster. In the example cluster domain `sample.aws.example.com`, your _environment id_ would be `sample`.
+  * Modify `instance_filters` entry (line 14) in the inventory `ec2.ini` file to match your chosen _environment id_
+  * Set the `env_id` variable in `group_vars/all.yml` to match.
+3. Edit `group_vars/all.yml` to match your AWS environment. See comments in the file for more detailed information on how to fill these in.
+4. Edit `group_vars/OSEv3.yml` for your AWS specific configuration. See comments in the file for more detailed information on how to fill these in.
 
-2) Edit `~/src/casl-ansible/inventory/sample.aws.example.com.d/inventory/group_vars/OSEv3.yml` for your AWS specific configuration. See comments in the file for more detailed information on how to fill these in.
-
-3) Run the `end-to-end` provisioning playbook via our [AWS installer container image](../images/installer-aws/).
+Run the `end-to-end` provisioning playbook via our [AWS installer container image](../images/installer-aws/).
 
 ```
 docker run -u `id -u` \
       -v $HOME/.ssh/id_rsa:/opt/app-root/src/.ssh/id_rsa:Z \
       -v $HOME/src/:/tmp/src:Z \
+      -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+      -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
       -e INVENTORY_DIR=/tmp/src/casl-ansible/inventory/sample.aws.example.com.d/inventory \
       -e PLAYBOOK_FILE=/tmp/src/casl-ansible/playbooks/openshift/end-to-end.yml \
       -e OPTS="-e aws_key_name=my-key-name" -t \
