@@ -1,5 +1,7 @@
 = OpenShift on AWS EC2 using CASL
 
+TODO: Using an existing VPC or maintaining the created VPC is not supported yet.
+
 == Local Setup (one time, only)
 
 NOTE: These steps are a canned set of steps serving as an example, and may be different in your environment.
@@ -8,11 +10,11 @@ Before getting started following this guide, you'll need the following:
 
 * Access to an AWS account with the proper policies to create resources (see details below)
 * Docker installed
-  * RHEL/CentOS: `yum install -y docker`
-  * Fedora: `dnf install -y docker`
-  * **NOTE:** If you plan to run docker as yourself (non-root), your username must be added to the `docker` user group.
+  ** RHEL/CentOS: `yum install -y docker`
+  ** Fedora: `dnf install -y docker`
+  ** **NOTE:** If you plan to run docker as yourself (non-root), your username must be added to the `docker` user group.
 * Ansible 2.5 or later installed
-  * link:https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html[See Installation Guide]
+  ** link:https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html[See Installation Guide]
 [source,bash]
 ----
 cd ~/src/
@@ -34,7 +36,7 @@ ansible-galaxy install -r casl-requirements.yml -p galaxy
 The following needs to be configured in your AWS account.
 
 * An link:https://console.aws.amazon.com/iam/home?#/users[IAM User] must be created with API access, and the ability to provision VPCs, Subnets, Instances, EBS Volumes, etc. (see note below on policy specifics)
-  * Once created, set export `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` to your environment.
+  ** Once created, set export `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` to your environment.
 * Create a link:http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair[Key-pair in AWS]
 * Create a link:https://console.aws.amazon.com/route53/home?#hosted-zones:[Hosted Zone] in your AWS Account.
 
@@ -75,18 +77,18 @@ Cool! Now you're ready to provision OpenShift clusters on AWS
 
 As an example, we'll provision the `sample.aws.example.com` cluster defined in the `~/src/casl-ansible/inventory` directory.
 
-NOTE: It is recommended that you use a different inventory similar to the ones found in the `~src/casl-ansible/inventory` directory and keep it elsewhere. This allows you to update/remove/change your casl-ansble source directory without losing your inventory. Also note that it may take some effort to get the inventory just right, hence it is very beneficial to keep it around for future use without having to redo everything.
+NOTE: Unless you already have a working inventory, it is recommended that you make a copy of the above mentioned sample inventory and keep it somewhere outside of the casl-ansible directory. This allows you to update/remove/change your casl-ansble source directory without losing your inventory. Also note that it may take some effort to get the inventory just right, hence it is very beneficial to keep it around for future use without having to redo everything.
 
 The following is just an example on how the `sample.aws.example.com` inventory can be used:
 
 1. Select an link:https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html[AWS Region] you would like to provision your cluster in.
-  * Modify the `regions` entry (line 13) in the inventory `ec2.ini` with your region
-  * Modify the `cloud_infrastructure.region` variable in `group_vars/all.yml` with your region.
+  ** Modify the `regions` entry (line 13) in the inventory `ec2.ini` with your region
+  ** Modify the `cloud_infrastructure.region` variable in `group_vars/all.yml` with your region.
 2. Select an _environment id_. This is a shortname for your cluster. In the example cluster domain `sample.aws.example.com`, your _environment id_ would be `sample`.
-  * Modify `instance_filters` entry (line 14) in the inventory `ec2.ini` file to match your chosen _environment id_
-  * Set the `env_id` variable in `group_vars/all.yml` to match.
+  ** Modify `instance_filters` entry (line 14) in the inventory `ec2.ini` file to match your chosen _environment id_
+  ** Set the `env_id` variable in `group_vars/all.yml` to match.
 3. Edit `group_vars/all.yml` to match your AWS environment. See comments in the file for more detailed information on how to fill these in.
-4. Edit `group_vars/OSEv3.yml` for your AWS specific configuration. See comments in the file for more detailed information on how to fill these in.
+4. Edit `group_vars/OSEv3.yml` for OpenShift related configuration. See comments in the file for more detailed information on how to fill these in.
 
 Run the `end-to-end` provisioning playbook via our link:../images/installer-aws/[AWS installer container image].
 
@@ -103,9 +105,11 @@ docker run -u `id -u` \
       redhatcop/installer-aws
 ----
 
-NOTE: The `aws_key_name` variable at the end should specify the name of your AWS keypair - as noted under AWS Specific Requirements above.
+NOTE: The `aws_key_name` variable at the end should specify the name of your AWS SSH keypair - as noted under AWS Specific Requirements above.
 
 NOTE: The above bind-mounts will map files and source directories to the correct locations within the control host container. Update the local paths per your environment for a successful run.
+
+NOTE: Depending on the SELinux configuration on your OS, you may or may not need the `:Z` at the end of the volume mounts.
 
 Done! Wait till the provisioning completes and you should have an operational OpenShift cluster. If something fails along the way, either update your inventory and re-run the above `end-to-end.yml` playbook, or it may be better to [delete the cluster](https://github.com/redhat-cop/casl-ansible#deleting-a-cluster) and re-start.
 
@@ -138,5 +142,3 @@ docker run -u `id -u` \
       -e PLAYBOOK_FILE=/tmp/src/casl-ansible/playbooks/openshift/delete-cluster.yml \
       redhatcop/installer-aws
 ----
-
-TODO: Using an existing VPC or maintaining the created VPC is not supported yet.
