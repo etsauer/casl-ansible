@@ -33,45 +33,15 @@ ansible-galaxy install -r casl-requirements.yml -p galaxy
 
 == AWS Setup
 
-The following needs to be configured in your AWS account.
+The following needs to be set up in your AWS account before provisioning.
 
 * An link:https://console.aws.amazon.com/iam/home?#/users[IAM User] must be created with API access, and the ability to provision VPCs, Subnets, Instances, EBS Volumes, etc. (see note below on policy specifics)
   ** Once created, set export `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` to your environment.
-* Create a link:http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair[Key-pair in AWS]
-* Create a link:https://console.aws.amazon.com/route53/home?#hosted-zones:[Hosted Zone] in your AWS Account.
+* A link:http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair[Key-pair in AWS] must exist in your AWS account that you can use to log into hosts once created.
+* A link:https://console.aws.amazon.com/route53/home?#hosted-zones:[Hosted Zone] must exist in your AWS Account.
+* Permission to provision the appropriate VPC, EC2, Route53, and CloudFormation resources. See link:./aws/policy.adoc[Policy Assignment] for details if you need help.
 
-=== Example Policy Assignment
-
-AWS Policy assignment can be pain. While perhaps not a minimalist  solution, here is an example set of policies that will allow provisioning to function.
-
-* link:https://console.aws.amazon.com/iam/home?#policies/arn:aws:iam::aws:policy/AmazonEC2FullAccess[EC2FullAccess]
-* link:https://console.aws.amazon.com/iam/home?#policies/arn:aws:iam::aws:policy/AmazonVPCFullAccess[VPCFullAccess]
-* link:https://console.aws.amazon.com/iam/home?#policies/arn:aws:iam::aws:policy/AmazonRoute53FullAccess[Route53FullAccess]
-
-Additionally, the following custom policy must be created for provisioning of CloudFormation stacks.
-
-[source,json]
-----
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "Stmt1535729505000",
-      "Effect": "Allow",
-      "Action": [
-        "cloudformation:*"
-      ],
-      "Resource": [
-        "arn:aws:cloudformation:us-east-2:[Insert ARN]:stack/*"
-      ]
-    }
-  ]
-}
-----
-
-NOTE: Make sure the region matches your target region above and that you insert an ARN that matches your account.
-
-Cool! Now you're ready to provision OpenShift clusters on AWS
+Cool! Now you're ready to provision OpenShift clusters on AWS.
 
 == Provision an OpenShift Cluster
 
